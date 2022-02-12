@@ -8,8 +8,7 @@
 
 typedef struct Move {
   Customer *customer;
-  size_t move_line_list_len;
-  MoveLine **move_line_list;
+  MoveLine *move_line_list;
 } Move;
 
 Move * move_create_from_invoice(Invoice *);

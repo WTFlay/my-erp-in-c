@@ -1,23 +1,45 @@
 #include "move.h"
 
-#define CUSTOMER_MOVE_LINE 1
-#define PRODUCT_MOVE_LINE 1
-
 Move * move_new(Customer *customer);
-MoveLine * move_line_new(Account *account, double debit, double credit);
 
 Move * move_create_from_invoice(Invoice *invoice) {
-  return NULL;
+  Move *move = move_new(invoice->customer);
+  MoveLine *customerMoveLine = move_line_new(move->customer->account, 0, 0);
+  MoveLine *lastMoveLineInList = customerMoveLine;
+  for (int i = 0; i < invoice->invoice_line_list->len; i++) {
+    InvoiceLine *invoiceLine = invoice->invoice_line_list->list[i];
+
+    Account *productAccount = invoiceLine->product->account;
+    MoveLine *productMoveLine = move_line_find_by_account(customerMoveLine, productAccount);
+    double priceWithoutTax = invoice_line_compute_total_price_without_tax(invoiceLine);
+    if (productMoveLine == NULL) {
+      productMoveLine = move_line_new(productAccount, 0, priceWithoutTax);
+      lastMoveLineInList->next_move_line = productMoveLine;
+      lastMoveLineInList = productMoveLine;
+    } else {
+      productMoveLine->credit += priceWithoutTax;
+    }
+
+    Account *productTaxAccount = invoiceLine->product->tax->account;
+    MoveLine  *taxMoveLine = move_line_find_by_account(customerMoveLine, productTaxAccount);
+    double taxPrice = invoice_line_compute_total_tax(invoiceLine);
+    if (taxMoveLine == NULL) {
+      taxMoveLine = move_line_new(productTaxAccount, 0, taxPrice);
+      lastMoveLineInList->next_move_line = taxMoveLine;
+      lastMoveLineInList = taxMoveLine;
+    } else {
+      taxMoveLine->credit += taxPrice;
+    }
+
+    customerMoveLine->debit += priceWithoutTax + taxPrice;
+  }
+  move->move_line_list = customerMoveLine;
+  return move;
 }
 
 Move * move_new(Customer *customer) {
-    return NULL;
-}
-
-MoveLine ** move_line_list_from_invoice_line(Invoice *invoice, InvoiceLine *invoice_line) {
-  MoveLine **move_line_list = calloc(2, sizeof(MoveLine *));
-  double price_without_tax = invoice_line_calcul_total_price_without_tax(invoice_line);
-  move_line_list[0] = move_line_new(invoice->customer->account, 0, price_without_tax);
-  move_line_list[1] = move_line_new(invoice_line->product->account, price_without_tax, 0);
-  return move_line_list;
+  Move *move = malloc(sizeof(Move));
+  move->customer = customer;
+  move->move_line_list = NULL;
+  return move;
 }

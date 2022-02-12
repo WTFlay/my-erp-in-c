@@ -1,8 +1,10 @@
+#include <stdio.h>
 #include "account/account.h"
 #include "tax/tax.h"
 #include "product/product.h"
 #include "invoice/invoice.h"
 #include "printer/printer.h"
+#include "move/move.h"
 
 int main() {
   Account customer_account = { .code = "411", .name = "Customer" };
@@ -34,6 +36,11 @@ int main() {
   invoice_add_invoice_line(invoice, &annual_maintenance_product, 1);
   invoice_add_invoice_line(invoice, &processor_product, 2);
   printer_print_invoice(invoice);
+
+  printf("\n");
+
+  Move *move = move_create_from_invoice(invoice);
+  printer_print_move(move);
 
   invoice_delete(invoice);
   return 0;

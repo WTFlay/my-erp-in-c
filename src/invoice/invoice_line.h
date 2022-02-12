@@ -11,5 +11,6 @@ typedef struct InvoiceLine {
 double invoice_line_get_product_price(InvoiceLine *);
 double invoice_line_compute_total_price(InvoiceLine *);
 double invoice_line_compute_total_price_without_tax(InvoiceLine *);;
+double invoice_line_compute_total_tax(InvoiceLine *);
 
 #endif

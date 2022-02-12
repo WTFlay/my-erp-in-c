@@ -4,6 +4,7 @@ OBJ = src/main.o \
 	  src/invoice/invoice_line.o \
       src/invoice/invoice_line_list.o \
       src/invoice/invoice.o \
+      src/move/move.o \
       src/move/move_line.o \
       src/printer/printer.o
 BIN = erp

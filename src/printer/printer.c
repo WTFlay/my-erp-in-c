@@ -31,3 +31,14 @@ void printer_print_invoice(Invoice *invoice) {
   double total_all_tax_included = invoice_compute_total_all_tax_included(invoice);
   printf("Total ATI: $%.2f\n", total_all_tax_included);
 }
+
+void printer_print_move(Move *move) {
+  MoveLine *moveLine = move->move_line_list;
+  printf("Account - Debit : Credit\n");
+  while (moveLine != NULL) {
+    char *accountCode = moveLine->account->code;
+    char *accountName = moveLine->account->name;
+    printf("%s %s - %.2f : %.2f\n", accountName, accountCode, moveLine->debit, moveLine->credit);
+    moveLine = moveLine->next_move_line;
+  }
+}

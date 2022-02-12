@@ -17,3 +17,9 @@ double invoice_line_compute_total_price_without_tax(InvoiceLine *invoice_line) {
   return product_price * quantity;
 }
 
+double invoice_line_compute_total_tax(InvoiceLine *invoice_line) {
+  double product_price = invoice_line_get_product_price(invoice_line);
+  double quantity = invoice_line->quantity;
+  double tax = invoice_line->product->tax->value;
+  return (product_price * quantity) * tax;
+}
