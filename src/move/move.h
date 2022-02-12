@@ -14,6 +14,4 @@ typedef struct Move {
 Move * move_create_from_invoice(Invoice *);
 void move_delete(Move *);
 
-
-
 #endif
