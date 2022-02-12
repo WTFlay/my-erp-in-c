@@ -3,6 +3,7 @@
 InvoiceLineList * invoice_line_list_new() {
   InvoiceLineList *invoice_line_list = malloc(sizeof(InvoiceLineList));
   invoice_line_list->len = 0;
+  invoice_line_list->list = calloc(0, sizeof(InvoiceLine *));
   return invoice_line_list;
 }
 
