@@ -15,7 +15,13 @@ MoveLine * move_line_new(Account *account, double debit, double credit) {
 }
 
 void move_line_delete(MoveLine *move_line) {
-  free(move_line);
+  MoveLine *current = move_line;
+  MoveLine *next;
+  while (current != NULL) {
+    next = current->next_move_line;
+    free(current);
+    current = next;
+  }
 }
 
 MoveLine *move_line_find_by_account(MoveLine *move_line, Account *account) {

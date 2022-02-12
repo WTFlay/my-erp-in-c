@@ -49,3 +49,8 @@ MoveLine * move_line_update_or_create_new_credit(MoveLine *customer_move_line, A
     return NULL;
   }
 }
+
+void move_delete(Move *move) {
+  move_line_delete(move->move_line_list);
+  free(move);
+}

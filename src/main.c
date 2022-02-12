@@ -42,6 +42,7 @@ int main() {
   Move *move = move_create_from_invoice(invoice);
   printer_print_move(move);
 
+  move_delete(move);
   invoice_delete(invoice);
   return 0;
 }
